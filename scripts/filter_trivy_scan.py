@@ -5,7 +5,7 @@ import requests
 import argparse
 
 
-def get_github_repo_id(repo, token):
+def get_github_repo_id(repo):
     url = f"https://api.github.com/repos/{repo}"
 
     response = requests.get(url)
@@ -15,7 +15,7 @@ def get_github_repo_id(repo, token):
     else:
         raise Exception(f"Failed to fetch repo ID: {response.status_code} - {response.text}")
 
-def filter_json(input_file_path, pom_file_path, github_token):
+def filter_json(input_file_path, pom_file_path):
     try:
 
         with open(input_file_path, 'r') as file:
@@ -28,7 +28,7 @@ def filter_json(input_file_path, pom_file_path, github_token):
 
         scan_link = repo_url+"/actions/runs/"+job_run_id
 
-        repo_id = get_github_repo_id(project_name, github_token)
+        repo_id = get_github_repo_id(project_name)
 
 
         with open(pom_file_path, 'rb') as pom_file:
@@ -80,11 +80,10 @@ def main():
     parser = argparse.ArgumentParser(description="Filter and format JSON data")
     parser.add_argument("input_file", help="Path to the input JSON file")
     parser.add_argument("pom_file", help="Path to the pom.xml file")
-    parser.add_argument("github_token", help="GitHub Personal Access Token")
 
     args = parser.parse_args()
 
-    filtered_json = filter_json(args.input_file, args.pom_file, args.github_token)
+    filtered_json = filter_json(args.input_file, args.pom_file)
     print(filtered_json)
 
 
