@@ -3,10 +3,10 @@ name: Vulnerability Scan
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 permissions:
   security-events: write
