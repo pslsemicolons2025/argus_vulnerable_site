@@ -58,6 +58,9 @@ jobs:
           name: trivy-json-report-filtered
           path: reports/filtered-trivy-report.json
 
+      - name: Display Run ID
+        run: echo "This run's ID is $GITHUB_RUN_ID"
+
   semgrep-scan:
     runs-on: ubuntu-latest
     steps:
