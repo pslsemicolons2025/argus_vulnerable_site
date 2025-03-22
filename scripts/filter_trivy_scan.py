@@ -35,14 +35,14 @@ def filter_json(input_file_path, pom_file_path):
             pom_base64 = base64.b64encode(pom_file.read()).decode('utf-8')
 
         filtered_data = {
-            "project_name": project_name,
+            "project_name": project_name.split("/")[1],
             "project_id": repo_id,
             "scan_id": scan_id[0:7],
             "git_link": repo_url,
             "scan_link": [scan_link],
             "cves": [],
             "pom.xml": pom_base64, 
-            "tags": []
+            "tags": [scan_id[0:7]]
             
         }
 
@@ -58,7 +58,7 @@ def filter_json(input_file_path, pom_file_path):
                 filtered_vuln = {
                     "category": category,
                     "solutions": [
-                        f"This vulnerability in {vuln.get('PkgID')} is fixed in {vuln.get('FixedVersion')}"
+                        f"This vulnerability in {vuln.get('PkgID')} is fixed in {vuln.get('FixedVersion')} versions"
                     ],  
                     "severity": vuln.get("Severity"),
                     "cve_id": vuln.get("VulnerabilityID"),
