@@ -32,6 +32,10 @@ jobs:
             --security-checks vuln,misconfig,secret,license \
             --vuln-type library \
             --format json --output reports/trivy-report.json .
+      
+      - name: Run Python Script to Filter Trivy Report
+        run: |
+          python3 scripts/filter_trivy_scan.py reports/trivy-report.json maven-example/pom.xml >> reports/filtered-trivy-report.json
 
       - name: Convert Trivy JSON to SARIF
         run: |
@@ -41,12 +45,18 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: reports/trivy-report.sarif
-
+          
       - name: Save Trivy JSON Report as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: trivy-json-report
           path: reports/trivy-report.json
+          
+      - name: Save Filtered Trivy JSON Report as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-json-report-filtered
+          path: reports/filtered-trivy-report.json
 
   semgrep-scan:
     runs-on: ubuntu-latest
